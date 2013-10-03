@@ -1,6 +1,8 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
+'''The 'O' in 'I/O' (pretty prints the solved board)'''
+
 from constants import BIG_TEMPLATE
 
 def organize(board):

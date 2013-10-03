@@ -1,6 +1,8 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
+'''The 'I' in 'I/O' (gets the Sudoku from the user)'''
+
 import sys, os
 import tty, termios
 

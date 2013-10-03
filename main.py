@@ -1,6 +1,8 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
+'''Main script to call that puts everything together'''
+
 from read import read
 from draw import draw
 from solve import solve
@@ -13,7 +15,7 @@ board = read()
 
 # avoid overflowing C Stack
 # TODO: make the other functions return a bool as to change or not, then call from here to avoid recursion
-sys.setrecursionlimit(50000)
+# sys.setrecursionlimit(50000)
 
 print("Solving...")
 board = solve(board)
