@@ -5,8 +5,11 @@
 
 from copy import deepcopy
 
+
+# help solve #################################################################
+
 # a number can appear only once
-def dedupe(board):
+def _dedupe(board):
     # guard against aliasing
     board = deepcopy(board)
 
@@ -53,7 +56,7 @@ def dedupe(board):
     return board
 
 # a number has to appear somewhere...
-def promote(board):
+def _promote(board):
     # guard against aliasing
     board = deepcopy(board)
 
@@ -142,6 +145,24 @@ def promote(board):
 
     return board
 
+
+# resolve ambiguity ##########################################################
+
+# check if the board has been solved
+def done(board):
+    return all(all(len(cell) == 1 for cell in board) for row in board)
+
+    # # fail immediately if a cell exists that hasn't been solved yet
+    # for row in board:
+    #     for cell in board:
+    #         if len(cell) > 1:
+    #             return False
+    # # else, return `True`
+    # else:
+    #     return True
+
+# integrate everything #######################################################
+
 # grand-daddy function to solve
 def solve(board):
     # guard against aliasing
@@ -154,8 +175,8 @@ def solve(board):
         original = deepcopy(board)
 
         # delegate solving to helpers
-        board = dedupe(board)
-        board = promote(board)
+        board = _dedupe(board)
+        board = _promote(board)
 
     # and finally...
     return board

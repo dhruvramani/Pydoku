@@ -5,7 +5,10 @@
 
 from constants import BIG_TEMPLATE
 
-def organize(board):
+
+# get board into shape #######################################################
+
+def _organize(board):
     format = []
     for row in board:
         for x in range(3):
@@ -14,7 +17,7 @@ def organize(board):
                 format.append(line)
     return format
 
-def expand(old_board):
+def _expand(old_board):
     new_board = []
 
     for old_row in old_board:
@@ -33,11 +36,36 @@ def expand(old_board):
 
     return new_board
 
-def draw(board):
-    expanded  = expand  (board)
-    formatted = organize(expanded)
 
-    print( BIG_TEMPLATE.format(*formatted) )
+# choose correct representation ##############################################
+
+def _pretty_print(board):
+    expanded  = _expand(board)
+    formatted = _organize(expanded)
+
+    string = BIG_TEMPLATE.format(*formatted)
+
+    return string
+
+def _normal_print(board):
+    return '\n'.join(''.join(row) for row in board)
+
+def _print(board, pretty_print):
+    if pretty_print:
+        return _pretty_print(board)
+    else:
+        return _normal_print(board)
+
+
+# integrate everything #######################################################
+
+def draw(board, pretty_print):
+    print(_print(board))
+
+def write(board, file_, pretty_print):
+    with file_:
+        file_.write(_print(board))
+        file_.write('\n')
 
 # def prettyPrint(board, reverse=False):
 #     def complement(old):

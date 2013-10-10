@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-'''Just contains some miscellanous constants'''
+'''Just contains some miscellaneous constants'''
 
 BLANK_CELL = (1, 2, 3, 4, 5, 6, 7, 8, 9)
 
