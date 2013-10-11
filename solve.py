@@ -9,7 +9,7 @@ from copy import deepcopy
 # help solve #################################################################
 
 # a number can appear only once
-def _dedupe(board):
+def _reduce(board):
     # guard against aliasing
     board = deepcopy(board)
 
@@ -28,7 +28,7 @@ def _dedupe(board):
                             bit2.remove(no)
                             assert len(bit2) > 0, \
                                 "the number {} was repeated in row {}" \
-                                    .format(no, y + 1)
+                                .format(no, y + 1)
 
                 # ... by column
                 for y2 in range(9):
@@ -38,7 +38,7 @@ def _dedupe(board):
                             bit2.remove(no)
                             assert len(bit2) > 0, \
                                 "the number {} was repeated in column {}" \
-                                    .format(no, x + 1)
+                                .format(no, x + 1)
 
                 # ... by block
                 y2_shift = (y // 3) * 3
@@ -67,7 +67,7 @@ def _promote(board):
         for no in range(1, 10):
 
             # track co-ords where no appears
-            occurences = []
+            occurrences = []
 
             # loop over bits
             for x, bit in enumerate(row):
@@ -75,13 +75,13 @@ def _promote(board):
                     # can it be the number?
                     if no in bit:
                         coord = (x, y)
-                        occurences.append(coord)
+                        occurrences.append(coord)
 
             # we found what we were looking for!
-            assert len(occurences) > 0, \
+            assert len(occurrences) > 0, \
                 "the number {} didn't occur in row {}".format(no, y+1)
-            if len(occurences) == 1:
-                x, y = occurences[0]
+            if len(occurrences) == 1:
+                x, y = occurrences[0]
                 board[y][x] = [no]
 
     # ... per column
@@ -91,7 +91,7 @@ def _promote(board):
         for no in range(1, 10):
 
             # track co-ords where no appears
-            occurences = []
+            occurrences = []
 
             # loop over bits
             for y in range(9):
@@ -100,13 +100,13 @@ def _promote(board):
                 # can it be the number?
                 if no in bit:
                     coord = (x, y)
-                    occurences.append(coord)
+                    occurrences.append(coord)
 
             # we found what we were looking for!
-            assert len(occurences) > 0, \
+            assert len(occurrences) > 0, \
                 "the number {} didn't occur in column {}".format(no, x+1)
-            if len(occurences) == 1:
-                x, y = occurences[0]
+            if len(occurrences) == 1:
+                x, y = occurrences[0]
                 board[y][x] = [no]
 
     # ... per block
@@ -120,7 +120,7 @@ def _promote(board):
             for no in range(1, 10):
 
                 # track co-ords where no appears
-                occurences = []
+                occurrences = []
 
                 # loop over bits
                 for y_pos in range(3):
@@ -134,13 +134,13 @@ def _promote(board):
                         # can it be the number?
                         if no in bit:
                             coord = (x, y)
-                            occurences.append(coord)
+                            occurrences.append(coord)
 
                 # we found what we were looking for!
-                assert len(occurences) > 0, \
+                assert len(occurrences) > 0, \
                     "the number {} didn't occur in block {} of row {}".format(no, x_shift/3, y_shift/3)
-                if len(occurences) == 1:
-                    x, y = occurences[0]
+                if len(occurrences) == 1:
+                    x, y = occurrences[0]
                     board[y][x] = [no]
 
     return board
@@ -150,7 +150,7 @@ def _promote(board):
 
 # check if the board has been solved
 def done(board):
-    return all(all(len(cell) == 1 for cell in board) for row in board)
+    return all(all(len(bit) == 1 for bit in row) for row in board)
 
     # # fail immediately if a cell exists that hasn't been solved yet
     # for row in board:
@@ -160,6 +160,10 @@ def done(board):
     # # else, return `True`
     # else:
     #     return True
+
+# go down all the alleys and find a right one (maybe a helper too?)
+def guess(board):
+    pass
 
 # integrate everything #######################################################
 
@@ -175,7 +179,7 @@ def solve(board):
         original = deepcopy(board)
 
         # delegate solving to helpers
-        board = _dedupe(board)
+        board = _reduce (board)
         board = _promote(board)
 
     # and finally...

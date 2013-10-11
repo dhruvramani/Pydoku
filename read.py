@@ -37,16 +37,21 @@ def _read_stdin():
 
         # try to parse the character now
         try:
+            # backspace
             if ord(char) == 127:
                 char = '\b'
                 if len(bits) > 0:
                     bits.pop()
                 else:
                     raise ValueError('')
+            # blank
             elif char == ' ':
                 bit = list(BLANK_CELL)
+            # digit
             else:
                 char = int(char)
+                if char == 0: # not (1 <= char <= 9):
+                    raise ValueError('')
                 bit = [char]
         # if invalid, pretend that as if nothing happened
         except ValueError:
@@ -70,7 +75,7 @@ def read_stdin():
         bits.extend(bit)
 
     print(template[-1])
-    board = [bits[i*9:i*9+9] for i in range(9)]
+    board = [ bits[i*9 : i*9+9] for i in range(9) ]
     return board
 
 # read from file
@@ -81,22 +86,34 @@ def read_file(file_):
     with file_:
         assert file_.name != '<stdin>', "reading as a file from stdin is not currently supported"
         rows = file_.readlines()
-        rows.remove('')
+
+        while len(rows) > 9:                          # while too many rows
+            if rows[-1]   == '\n': rows.pop()         # start popping blank end lines
+            elif rows[0]  == '\n': rows.remove('\n')  # else, remove beginning blank lines
+        while len(rows) < 9:                          # while too little rows
+            rows.append('\n')                         # add blank lines to the end
 
         assert len(rows) == 9, "{} had {} rows instead of 9".format(error, len(rows))
         for index, bits in enumerate(rows):
+            bits = list(bits)  # convert string into list of characters
+            bits.pop()         # remove newline
             row = []
 
-            assert len(bits) == 9, "{} had {} number in row {} instead of 9".format(error, len(bits), index)
+            assert len(bits) <= 9, "{} had {} number in row {} instead of 9".format(error, len(bits), index+1)
             for bit in bits:
 
                 if bit == ' ':
                     bit = list(BLANK_CELL)
                     row.append(bit)
                 else:
-                    assert bit.isdigit, "{} contained invalid character {}".format(error, bit)
+                    assert bit.isdigit and int(bit) != 0, \
+                        "{} contained invalid character {}".format(error, bit)  # assert digit is 1-9
                     bit = [int(bit)]
                     row.append(bit)
+
+            while len(row) < 9:         # while too little cells
+                bit = list(BLANK_CELL)  # blank cell
+                row.append(bit)         # added in the end
 
             board.append(row)
 
