@@ -6,7 +6,7 @@
 from copy import deepcopy
 
 
-# help solve #################################################################
+# solve ######################################################################
 
 # a number can appear only once
 def _reduce(board):
@@ -145,29 +145,7 @@ def _promote(board):
 
     return board
 
-
-# resolve ambiguity ##########################################################
-
-# check if the board has been solved
-def done(board):
-    return all(all(len(bit) == 1 for bit in row) for row in board)
-
-    # # fail immediately if a cell exists that hasn't been solved yet
-    # for row in board:
-    #     for cell in board:
-    #         if len(cell) > 1:
-    #             return False
-    # # else, return `True`
-    # else:
-    #     return True
-
-# go down all the alleys and find a right one (maybe a helper too?)
-def guess(board):
-    pass
-
-# integrate everything #######################################################
-
-# grand-daddy function to solve
+# daddy function to solve
 def solve(board):
     # guard against aliasing
     board = deepcopy(board)
@@ -184,3 +162,41 @@ def solve(board):
 
     # and finally...
     return board
+
+
+# guess ######################################################################
+
+# check if the board has been solved
+def done(board):
+    return all( all(len(bit) == 1 for bit in row) for row in board )
+
+# go down all the alleys and find a right one
+def guess(board):
+    # guard against aliasing
+    original = deepcopy(board)
+
+    # loop over bits
+    for y in range(9):
+        for x in range(9):
+            board = deepcopy(original)
+            bit = board[y][x]
+
+            # if undone, start guessing
+            if len(bit) > 1:
+                for possibility in bit:
+                    board[y][x] = [possibility]
+
+                    # try continuing, abort if error, and return if true
+                    try:
+                        solved = solve(board)
+                    except AssertionError:
+                        continue
+
+                    if done(solved):
+                        return solved
+                    else:
+                        guessed = guess(board)
+                        if guessed:
+                            return guessed
+
+    return False

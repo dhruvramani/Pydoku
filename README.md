@@ -29,13 +29,13 @@ Features
 * [ ] Interacting with user;
 * [x] Solving by:-
 
-    - [x] Logic:-
+    - [x] logic:-
 
-        + [x] Reducing;
-        + [x] Promoting;
+        + [x] reducing;
+        + [x] promoting;
 
-    - [ ] Guessing;
-    - [x] Finishing when done;
+    - [x] guessing;
+    - [x] finishing when done;
     - [x] using iteration instead of tail-recursion;
     - [x] tracking time taken;
 

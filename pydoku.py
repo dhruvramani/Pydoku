@@ -45,11 +45,17 @@ if not no_solve:
             response = input("\nBoard couldn't be solved by logic alone. Start guessing? [y/n] ") \
                 .strip().lower()[0]
             if response == 'y':
-                print("Guessing...", end='')
+                print("Guessing... ", end='')
+
                 start = time.clock()
-                board = solve.guess(board)
+                guess = solve.guess(board)
+                if guess:
+                    board = guess
+                    print("Guessed a correct solution!")
+                else:
+                    print("Couldn't find a solution; displaying the half-solved board.")
                 duration += time.clock() - start
-                print("Guessed a correct solution!")
+
                 break
             elif response == 'n':
                 print("Will not try to guess and complete the board.")
